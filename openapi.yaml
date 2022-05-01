@@ -1,0 +1,138 @@
+openapi: 3.0.0
+
+info:
+  description: Node JS Test
+  version: '1.0.0'
+  title: Node JS Test
+  contact:
+    email: hafizabdullahtariq123@gmail.com
+basePath: /
+tags:
+  - name: Users
+    description: User APIs (Admin & Customer)
+schemes:
+  - http
+paths:
+  /user/signup:
+    post:
+      tags:
+        - Users
+      summary: User/Admin Signup
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: Success response
+          schema:
+            $ref: '#/definitions/Message'
+        '400':
+          description: Error response
+          schema:
+            $ref: '#/definitions/Error'
+  /signin:
+    post:
+      tags:
+        - Users
+      summary: User/Admin Signin
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: Success response
+          schema:
+            $ref: '#/definitions/Token'
+        '400':
+          description: Error response
+          schema:
+            $ref: '#/definitions/Error'
+  /private/user:
+    get:
+      tags:
+        - Users
+      summary: Customer Private Route
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success response
+          schema:
+            $ref: '#/definitions/Message'
+        '403':
+          description: Error response
+          schema:
+            $ref: '#/definitions/Error'
+  /private/admin:
+    get:
+      tags:
+        - Users
+      summary: Admin Private Route
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success response
+          schema:
+            $ref: '#/definitions/Message'
+        '403':
+          description: Error response
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+  Messsage:
+    type: object
+    properties:
+      message:
+        type: string
+        example: User created successfully
+  Error:
+    type: object
+    properties:
+      error:
+        type: string
+        example: Invalid request
+  Token:
+    type: object
+    properties:
+      token:
+        type: string
+        example: token
+  User:
+    type: object
+    required:
+      - username
+      - password
+    properties:
+      username:
+        type: string
+        example: username
+      password:
+        type: string
+        example: password
+      role:
+        type: string
+        example: ADMIN
