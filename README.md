@@ -83,6 +83,8 @@ redoc-static.html
 
 ## How to run?
 
-1.) npm i
-2.) npm run seed
-3.) npm start
+```
+npm i
+npm run seed
+npm start
+```
