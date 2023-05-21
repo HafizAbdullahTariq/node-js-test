@@ -27,15 +27,15 @@ const createUser = catchAsync(async (req, res) => {
   if (!validateRequst.valid) {
     return res
       .status(BAD_REQUEST_STATUS_CODE)
-      .send({ success: false, message: BAD_REQUEST_MESSAGE, errors: validateRequst.errors });
+      .json({ success: false, message: BAD_REQUEST_MESSAGE, errors: validateRequst.errors });
   }
 
-  if (userPayload.id !== undefined) {
+  if (userPayload.id) {
     // Find user in data structure
     const userIndex = users.findIndex((u) => u.id === userPayload.id);
     // return error if duplicate user found
     if (userIndex !== -1) {
-      res
+      return res
         .status(BAD_REQUEST_STATUS_CODE)
         .json({ success: false, message: `User with id: ${userPayload.id} already exists` });
     }
@@ -59,7 +59,7 @@ const findUser = catchAsync(async (req, res) => {
   if (!validateRequst.valid) {
     return res
       .status(BAD_REQUEST_STATUS_CODE)
-      .send({ success: false, message: BAD_REQUEST_MESSAGE, errors: validateRequst.errors });
+      .json({ success: false, message: BAD_REQUEST_MESSAGE, errors: validateRequst.errors });
   }
   // Find user in data structure
   const user = users.find((u) => u.id === id);
@@ -82,7 +82,7 @@ const replaceUser = catchAsync(async (req, res) => {
   if (!validateRequst.valid) {
     return res
       .status(BAD_REQUEST_STATUS_CODE)
-      .send({ success: false, message: BAD_REQUEST_MESSAGE, errors: validateRequst.errors });
+      .json({ success: false, message: BAD_REQUEST_MESSAGE, errors: validateRequst.errors });
   }
   // Find user in data structure
   const userIndex = users.findIndex((u) => u.id === id);
@@ -93,7 +93,7 @@ const replaceUser = catchAsync(async (req, res) => {
       .json({ success: false, message: `User with id: ${id} not found` });
   }
   // Update user data
-  users[userIndex] = userPayload;
+  users[userIndex] = { id, userPayload };
   // Return updated user
   res
     .status(SUCCESS_STATUS_CODE)
@@ -109,7 +109,7 @@ const updateUser = catchAsync(async (req, res) => {
   if (!validateRequst.valid) {
     return res
       .status(BAD_REQUEST_STATUS_CODE)
-      .send({ success: false, message: BAD_REQUEST_MESSAGE, errors: validateRequst.errors });
+      .json({ success: false, message: BAD_REQUEST_MESSAGE, errors: validateRequst.errors });
   }
   // Find user in data structure
   const userIndex = users.findIndex((u) => u.id === id);
@@ -135,7 +135,7 @@ const deleteUser = catchAsync(async (req, res) => {
   if (!validateRequst.valid) {
     return res
       .status(BAD_REQUEST_STATUS_CODE)
-      .send({ success: false, message: BAD_REQUEST_MESSAGE, errors: validateRequst.errors });
+      .json({ success: false, message: BAD_REQUEST_MESSAGE, errors: validateRequst.errors });
   }
   // Find user in data structure
   const userIndex = users.findIndex((u) => u.id === id);
@@ -164,7 +164,7 @@ const listUser = catchAsync(async (req, res) => {
   if (!validateRequst.valid) {
     return res
       .status(BAD_REQUEST_STATUS_CODE)
-      .send({ success: false, message: BAD_REQUEST_MESSAGE, errors: validateRequst.errors });
+      .json({ success: false, message: BAD_REQUEST_MESSAGE, errors: validateRequst.errors });
   }
   const startIndex = (page - 1) * size;
   const endIndex = startIndex + size;
@@ -176,7 +176,7 @@ const listUser = catchAsync(async (req, res) => {
 });
 
 const getNextUserId = () => {
-  let largestId = 0;
+  let largestId = 1;
   if (!users.length) return largestId;
   for (const user of users) {
     if (user.id > largestId) {

@@ -6,11 +6,14 @@
     "start": "node server",
     "dev": "nodemon server",
     "eslint": "eslint server/",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_PATH=. NODE_ENV=test mocha --timeout 5000 ./server/controllers/**/*.test.js --exit",
+    "test:coverage": "nyc npm run test",
+    "doc": "redoc-cli bundle ./openapi.yaml --output redoc-static.html"
   },
   "author": "Hafiz Abdullah Tariq",
   "dependencies": {
     "ajv": "^8.12.0",
+    "ajv-formats": "^2.1.1",
     "bcrypt": "^5.1.0",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
@@ -23,10 +26,28 @@
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0"
   },
+  "nyc": {
+    "include": [
+      "server/controllers/**/*.js",
+      "server/controllers/**/**/*.js",
+      "!server/controllers/**/*test.js",
+      "!server/controllers/**/**/*test.js"
+    ],
+    "reporter": [
+      "lcov",
+      "text",
+      "text-summary"
+    ]
+  },
   "devDependencies": {
+    "@faker-js/faker": "^8.0.1",
+    "chai": "^4.3.7",
+    "chai-as-promised": "^7.1.1",
     "eslint": "^8.41.0",
-    "jest": "^29.5.0",
-    "jsdoc": "^4.0.2",
-    "nodemon": "^2.0.16"
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.16",
+    "nyc": "^15.1.0",
+    "redoc-cli": "^0.13.21",
+    "supertest": "^6.3.3"
   }
 }

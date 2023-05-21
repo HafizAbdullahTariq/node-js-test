@@ -1,5 +1,7 @@
 const Ajv = require('ajv');
+const addFormats = require('ajv-formats');
 const ajv = new Ajv(); // options can be passed, e.g. {allErrors: true}
+addFormats(ajv);
 const {
   FAIL,
   ERROR,

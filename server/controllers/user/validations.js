@@ -4,7 +4,10 @@ const num = { type: 'number' };
 const userAjv = {
   id: num,
   name: str,
-  email: str,
+  email: {
+    ...str,
+    format: 'email',
+  },
   address: str,
   phone: str,
 };

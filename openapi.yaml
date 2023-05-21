@@ -9,15 +9,15 @@ info:
 basePath: /
 tags:
   - name: Users
-    description: User APIs (Admin & Customer)
+    description: User CRUD APIs
 schemes:
   - http
 paths:
-  /user/signup:
+  /api/user:
     post:
       tags:
         - Users
-      summary: User/Admin Signup
+      summary: Create user
       consumes:
         - application/json
       produces:
@@ -28,111 +28,70 @@ paths:
             schema:
               $ref: '#/definitions/User'
       responses:
-        '200':
+        200:
           description: Success response
           schema:
-            $ref: '#/definitions/Message'
-        '400':
+            $ref: '#/definitions/SuccessResponse'
+        400:
           description: Error response
           schema:
-            $ref: '#/definitions/Error'
-  /signin:
-    post:
-      tags:
-        - Users
-      summary: User/Admin Signin
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/definitions/User'
-      responses:
-        '200':
-          description: Success response
-          schema:
-            $ref: '#/definitions/Token'
-        '400':
-          description: Error response
-          schema:
-            $ref: '#/definitions/Error'
-  /private/user:
-    get:
-      tags:
-        - Users
-      summary: Customer Private Route
-      produces:
-        - application/json
-      parameters:
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Success response
-          schema:
-            $ref: '#/definitions/Message'
-        '403':
-          description: Error response
-          schema:
-            $ref: '#/definitions/Error'
-  /private/admin:
-    get:
-      tags:
-        - Users
-      summary: Admin Private Route
-      produces:
-        - application/json
-      parameters:
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Success response
-          schema:
-            $ref: '#/definitions/Message'
-        '403':
-          description: Error response
-          schema:
-            $ref: '#/definitions/Error'
+            $ref: '#/definitions/ErrorResponse'
 
 definitions:
-  Messsage:
+  SuccessResponse:
     type: object
     properties:
+      success:
+        type: boolean
+        example: true
       message:
         type: string
         example: User created successfully
-  Error:
+      user:
+        type: object
+        properties:
+          id:
+            type: number
+            example: 1
+          name:
+            type: string
+            example: John Doe
+          email:
+            type: string
+            example: 'john@example.com'
+          address:
+            type: string
+            example: USA
+          phone:
+            type: string
+            example: 456112233
+  ErrorResponse:
     type: object
     properties:
-      error:
+      success:
+        type: boolean
+        example: false
+      message:
         type: string
-        example: Invalid request
-  Token:
-    type: object
-    properties:
-      token:
-        type: string
-        example: token
+        example: invalid request
   User:
     type: object
     required:
-      - username
-      - password
+      - name
+      - email
     properties:
-      username:
+      id:
+        type: number
+        example: 1
+      name:
         type: string
-        example: username
-      password:
+        example: John Doe
+      email:
         type: string
-        example: password
-      role:
+        example: 'john@example.com'
+      address:
         type: string
-        example: ADMIN
+        example: USA
+      phone:
+        type: string
+        example: 456112233
