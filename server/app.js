@@ -4,15 +4,16 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
-const path = require('path');
-const { AppError, globalErrorHandler } = require('./server/utils/helpers');
+// const path = require('path');
+const { AppError, globalErrorHandler } = require('./utils/helpers');
 const cors = require('cors');
-const router = require('./server/routes');
+const router = require('./routes');
+const { IS_DEV_ENV } = require('./utils/constants');
 
 const app = express();
 
 // Development Logging or Set security HTTP headers
-if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
+if (IS_DEV_ENV) app.use(morgan('dev'));
 else app.use(helmet());
 
 // Limit a connection to 1000 requests per hour
@@ -35,17 +36,17 @@ app.use(compression());
 // ROUTER
 app.use('/api', router);
 
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, 'public/index.html'), function (err) {
-    if (err) res.status(500).send(err);
-  });
-});
+// app.get('*', (_, res) => {
+//   res.sendFile(path.join(__dirname, 'public/index.html'), (err) => {
+//     if (err) res.status(500).send(err);
+//   });
+// });
 
 // Handle undefined routes
 //! Order dependent! Must be placed before globalErrorHandler.
-app.all('*', (req, res, next) => {
+app.all('*', (req, _, next) => {
   next(new AppError(`Cannot find ${req.originalUrl} on the server.`, 404));
 });
 

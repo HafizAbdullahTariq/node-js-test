@@ -15,7 +15,7 @@ process.on('unhandledRejection', (err) => {
 });
 
 const debug = require('debug')('node:server');
-const app = require('../app');
+const app = require('./app');
 const server = require('http').Server(app);
 const PORT = process.env.PORT || 3100;
 
