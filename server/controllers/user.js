@@ -1,4 +1,4 @@
-const { catchAsync } = require('../../utils');
+const { catchAsync } = require('../utils/helpers');
 const { UserModel, RoleModel } = require('../model');
 
 const list = (req, res) => {

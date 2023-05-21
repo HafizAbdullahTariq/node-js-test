@@ -5,7 +5,7 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const path = require('path');
-const { AppError, globalErrorHandler } = require('./utils');
+const { AppError, globalErrorHandler } = require('./server/utils/helpers');
 const cors = require('cors');
 const router = require('./server/routes');
 
@@ -33,7 +33,7 @@ app.use(cookieParser());
 app.use(compression());
 
 // ROUTER
-app.use('/', router);
+app.use('/api', router);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
